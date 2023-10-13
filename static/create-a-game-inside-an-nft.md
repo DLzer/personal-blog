@@ -6,7 +6,7 @@ You heard that right 🙃.
 
 NFT's have been around for a while now, and since their inception they've come a long way in terms of functionality and popularity. I remember the early days of the ERC20 token standard, Defi yield-farming, and the first NFTs. This evolution has blown my mind every step of the way.
 
-I knew pretty soon after hearing about the blockchain that I was already magnetized to the idea of creating some tpye of ethereal currency that can immutably live on a blockchain for.. eternity? 
+I knew pretty soon after hearing about the blockchain that I was already magnetized to the idea of creating some tpye of ethereal currency that can immutably live on a blockchain for.. eternity?
 
 I've been pretty lucky, and thankful, to have been part of some amazing teams and to have helped turn their blockchain ideas into full blown projects. This has lead me down a path I will not regret. Ok, enough about me.
 
@@ -24,7 +24,7 @@ It was only a matter of time before I took one passion and combined it with anot
 
 The first part of this was relatively simple. I knew I needed to move the static Zork application to a CDN so that I can serve it fast and efficiently.
 
-![Zork on CDN](https://dlzer.dev/assets/zork-cdn.png "Zork On CDN")
+![Zork on CDN](https://dlzer.dev/assets/zork-cdn.png 'Zork On CDN')
 
 I uploaded the content to a CDN storage spaces on Digital Ocean and messed around with some policies until I was able to visit the CDN link and run the game.
 
@@ -38,16 +38,16 @@ This is what the metadata looked like:
 
 ```json
 {
-    "description": "This is a test token for the ZORK project",
-    "image": "https://zork.nyc3.cdn.digitaloceanspaces.com/zork.png",
-    "animation_url": "https://zork.nyc3.cdn.digitaloceanspaces.com/index.html",
-    "name": "Zork Token"
+	"description": "This is a test token for the ZORK project",
+	"image": "https://zork.nyc3.cdn.digitaloceanspaces.com/zork.png",
+	"animation_url": "https://zork.nyc3.cdn.digitaloceanspaces.com/index.html",
+	"name": "Zork Token"
 }
 ```
 
 I generated 2 tokens to test it out, and when I opened OpenSea what do you know! There's ZORK, playable, inside of an NFT on OpenSea!!
 
-![Zork on OpenSea](https://dlzer.dev/assets/zork-opensea.png "Zork On OpenSea")
+![Zork on OpenSea](https://dlzer.dev/assets/zork-opensea.png 'Zork On OpenSea')
 
 ## Conclusion
 
@@ -56,4 +56,3 @@ I know this was more wordy than technical, but in retrospect it was a pretty sim
 Until then remember, with grea power comes great responsibility 🧙
 
 P.S. Happy Friday the 13th!
-
