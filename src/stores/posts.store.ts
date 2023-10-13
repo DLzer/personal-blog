@@ -9,6 +9,12 @@ export interface Post {
 
 export const posts = readable<Post[]>([
 	{
+		title: 'Create a game inside an NFT',
+		slug: 'create-a-game-inside-an-nft',
+		isPublished: true,
+		datePublished: new Date('2023-10-13')
+	},
+	{
 		title: 'Create a Merkle Tree using NodeJs',
 		slug: 'create-a-merkle-tree-using-nodejs',
 		isPublished: true,
