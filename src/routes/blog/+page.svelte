@@ -3,8 +3,11 @@
 </script>
 
 <svelte:head>
-	<title>Blog</title>
-	<meta name="description" content="Dlzers Blog" />
+	<title>Blog | Dillon Lomnitzer Blog</title>
+	<meta name="description" content="Welcome to Dillon Lomnitzer's personal blog!" />
+	<meta name="keywords" content="Blog, Dillon Lomnitzer, Svelte, Go, Python" />
+	<meta name="author" content="Dillon Lomnitzer" />
+	<meta property="og:image" content="https://dlzer.dev/assets/dlzer.png" />
 </svelte:head>
 
 <section>
