@@ -1,6 +1,6 @@
 // src/routes/blog[slug]/+page.ts
 import type { PageLoad } from './$types';
-import { Marked, marked } from 'marked';
+import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
 
@@ -29,6 +29,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
 			post: marked.parse(post)
 		};
 	} catch (e) {
+		console.error(e);
 		throw e;
 	}
 };
