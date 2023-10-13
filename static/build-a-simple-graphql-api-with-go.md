@@ -6,7 +6,7 @@ The technical definition of <strong>GraphQL</strong> is: an open-source data man
 
 In this module I hope to bridge the gap between transitioning from using a traditional REST-API to using GraphQL to provide data for our applications. This article itself acts as both an information resource and a training document for referencing.
 
-## Prerequisites 
+## Prerequisites
 
 1. Go installation - Preferably >= 1.19
 2. A basic knowledge and understanding of Go
@@ -17,11 +17,13 @@ In this module I hope to bridge the gap between transitioning from using a tradi
 Typically in the setup sections I would briefly go over creating an initial project directory. However, because we are using the [gqlgen](https://github.com/99designs/gqlgen) library to bootstrap our GraphQL server + schema there are a few extra steps I will document here.
 
 First we&#39;ll start off by installing the primary gqlgen tool:
+
 ```sh
 $ go install github.com/99designs/gqlgen@latest
 ```
 
 Now we can create and initialize our typical Go project
+
 ```sh
 $ mkdir gqlexample
 $ cd gqlexample
@@ -196,9 +198,11 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 ```
 
 In the mutation above we defined a few items. First, we accept our NewUser model as input and add a UUID ( I&#39;m using the google/uuid package ). I also added a timestamp for our created time. After that I&#39;m using the ORM to insert the new model into the database. Finally we handle any error from the response, if there are none we return the created user!</p><p>We can now run our app to test creating users. Start the app with:
+
 ```sh
 $ go run ./server.go
 ```
+
 If you navigate to the defined port on our local system you can access a build in GraphQL editor ( <strong><em>localhost:8080&nbsp;</em></strong>). You can paste the create mutation below to create a new user:
 
 ```go
@@ -221,7 +225,7 @@ For the last step in this model we will implement the <strong><em>Users&nbsp;</e
 ```go
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
     var users []*model.User
-    
+
     err := r.DB.Model(&users).Select()
     if err != nil {
         return nil, err

@@ -4,8 +4,8 @@
 
 Next up is installing and configuring cert manager to manage all issuing/expiration of certificates via the CA ( Certificate Authority ) of our choosing. I've already spent most of a day trying ( and failing ) to get it properly configured, but alas, there is no growth without failure.
 
-* Cert Manager Docs
-* Helm Repo
+- Cert Manager Docs
+- Helm Repo
 
 At the time of writing this the latest version of Jetstack/Cert-Manager is `1.10.0` so we will use that for our installation.
 
@@ -22,11 +22,13 @@ customresourcedefinition.apiextensions.k8s.io/certificaterequests.cert-manager.i
 customresourcedefinition.apiextensions.k8s.io/issuers.cert-manager.io created
 customresourcedefinition.apiextensions.k8s.io/orders.acme.cert-manager.io created
 ```
+
 After CRDs have been applied we can add Jetstack/Cert-Manager to our helm repo list
 
 ```sh
 $ helm repo add jetstack https://charts.jetstack.io
 ```
+
 Install the cert-manager under it's own release and namespace using Helm
 
 ```sh
@@ -64,7 +66,7 @@ spec:
     solvers:
     - http01:
         ingress:
-          class: nginx       
+          class: nginx
 ```
 
 I&#39;m using the production letsencrypt endpoint here because this domain will continue to be used and locked to this application for the foreseeable future.
@@ -79,13 +81,14 @@ issuer.cert-manager.io/letsencrypt-beehive-prod created
 We should now have an active <em>Issuer</em> resource! However, we&#39;re not done just yet. We&#39;ll need to re-configure each services Ingress to specify some annotations and enable TLS.
 
 To keep this short I&#39;ll provide the resource re-configuration here:
+
 ```yaml
 ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
     # Here we added the annotations to enable TLS-Acme, and specified the cert managing Issuer we&#39;ll hook onto
-    kubernetes.io/tls-acme: "true"
+    kubernetes.io/tls-acme: 'true'
     cert-manager.io/issuer: letsencrypt-app-prod
   hosts:
     - host: app.mysite.com
@@ -96,23 +99,27 @@ ingress:
             service:
               name: #{serviceName}
               port:
-               number: 80
+                number: 80
   # Here&#39;s the TLS stanza that we&#39;ve added. Note the host name to be secured, as well as a TLS-Secret
   # that is relative to the individual service we&#39;re updating.
   tls:
-  - hosts:
-    - app.mysite.com
-    secretName: #{serviceName}-tls
-```   
+    - hosts:
+        - app.mysite.com
+      secretName: #{serviceName}-tls
+```
+
 After that&#39;s all set we can apply the configuration changes using Helm
 
 ```sh
 $ helm upgrade beehive ./Charts/beehive
 ```
+
 This is where the issues start..
+
 ## Issues
 
 1. On initial observation the SSL Cert was applied, however it was being denied by browser due to error "<strong><em>Kubernetes Issued Fake Certificate</em></strong>"<br><br>To locate the source of the issue I made a deep-dive into troubleshooting via `Kubectl`. Using `kubectl describe` I can find logs on individual reason why the certificates were not being correctly provisioned.
+
 ```sh
 $ kubectl describe certificates
 >>
@@ -145,9 +152,10 @@ Events:
   Normal  Issuing    3m29s  cert-manager-certificates-trigger          Issuing certificate as Secret does not exist
   Normal  Generated  3m28s  cert-manager-certificates-key-manager      Stored new private key in temporary Secret resource "characters-tls-6x2nk"
   Normal  Requested  3m28s  cert-manager-certificates-request-manager  Created new CertificateRequest resource "characters-tls-z72fs"
-```  
+```
 
 OK so the certificate doesn&#39;t exist and is having issues provisioning. Going down the troubleshooting list for ACME/LetsEncrypt found [here](https://cert-manager.io/docs/troubleshooting/acme/) it says we should check to make sure that the `<em>http01</em>` challenge is working correctly. Let&#39;s check it out
+
 ```sh
 $ kubectl get challenges
 >>
@@ -158,6 +166,7 @@ players-tls-hcn4f-3765316351-1478577462                app.mysite.com   6m32s
 quests-tls-t6xvj-3765316351-1478577462                 app.mysite.com   6m32s
 store-tls-gwmx6-3765316351-1478577462                  app.mysite.com   6m31s
 ```
+
 Hmm that&#39;s strange, why is the challenge not completing. Let&#39;s find out.
 
 ```sh
@@ -175,14 +184,15 @@ Events:
   Normal  Started    7m14s  cert-manager-challenges  Challenge scheduled for processing
   Normal  Presented  7m14s  cert-manager-challenges  Presented challenge using HTTP-01 challenge mechanism
 ```
-  
+
 Interesting. The challenge is failing from a simple HTTP-01 request. My thought&#39;s are is if we can fix the Challenge we fix the certificate provisioning.
 
 ## Solution
 
-*Luckily* after only a few minutes of ninja-level google searching I came across this <a href="https://stackoverflow.com/a/65879795" rel="noopener noreferrer" target="_blank">answer</a> in StackOverflow.
+_Luckily_ after only a few minutes of ninja-level google searching I came across this <a href="https://stackoverflow.com/a/65879795" rel="noopener noreferrer" target="_blank">answer</a> in StackOverflow.
 
 Let&#39;s break down what this solution would do to our infrastructure. When making a Challenge, the LoadBalancer want&#39;s to test the internal services using the `http01` method. That&#39;s great.. except the internal services are configured to only be recognized by their internal IP addresses. If we change the annotation on our LoadBalancer to specify an internal host name to use, this could potentially solve our issue.<br><br>Let&#39;s add the annotation to our LoadBalancer config <em>staging_load.yaml</em>.
+
 ```sh
 apiVersion: v1
 kind: Service
@@ -225,4 +235,5 @@ job.batch/ingress-nginx-admission-patch unchanged
 ingressclass.networking.k8s.io/nginx unchanged
 validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission configured
 ```
+
 After checking the output via Browser, and PostMan I can confirm.. we have successfully provisioned our SSL!

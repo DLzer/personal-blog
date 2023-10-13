@@ -39,22 +39,22 @@ That&#39;s all we&#39;ll need!
 Next we can start creating a list of hex values to add to our tree
 
 ```js
-const {MerkleTree} = require("merkletreejs")
-const keccack256 = require("keccak256")
+const { MerkleTree } = require('merkletreejs');
+const keccack256 = require('keccak256');
 
 // List of addresses
 let addresses = [
-    '0x33039b066102dEb002313B8ee75514d5e16f161e',
-    '0x80f4760E9309E60c7ef066827846B792AEeEAd57',
-    '0x1B7C182AF1c1504AA2f95392720724a28a214B1C'
-]
+	'0x33039b066102dEb002313B8ee75514d5e16f161e',
+	'0x80f4760E9309E60c7ef066827846B792AEeEAd57',
+	'0x1B7C182AF1c1504AA2f95392720724a28a214B1C'
+];
 ```
 
 With our addresses in place we can now turn them into <em>leaves</em> by hashing them.
 
 ```js
 // Hash our leaves
-let leaves = addresses.map(addr = keccak256(addr))
+let leaves = addresses.map((addr = keccak256(addr)));
 ```
 
 Awesome, we have some leaves to assemble our tree with. Now let&#39;s finish up with our tree.
@@ -101,8 +101,8 @@ Well.. we got our proof. Unfortunately it&#39;s not necessarily human readable. 
 
 ```js
 // Verify proof
-let verified = merkleTree.verify(proof, hashedAddress, rootHash)
-console.log(verified) // returns a Bool
+let verified = merkleTree.verify(proof, hashedAddress, rootHash);
+console.log(verified); // returns a Bool
 ```
 
 Excellent! We&#39;ve sent our information into the verify function and have confirmed verification of proof that we are indeed cryptographically part of this tree.
@@ -112,6 +112,7 @@ Excellent! We&#39;ve sent our information into the verify function and have conf
 But where does all this leave us ? Well.. you&#39;re ready &nbsp;to use merkles in the real world. Merkle Trees are part of a large cryptographic family of systems of verification. They are used because they are efficient and we essentially only need our Root Hash and our Proof to determine if something is valid on our tree. This could be used as a checksum to determine if a file is part of a larger directory, or if an address is allowed to access parts of a smart contract.
 
 To summarize what we've went over:
+
 - We learned <strong>What a Merkle Tree is</strong>
 - We learned <strong>How to create a Merkle Tree</strong>
 - We learned <strong>How a Merkle Tree could be used<br></strong>

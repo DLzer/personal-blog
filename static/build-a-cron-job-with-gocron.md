@@ -7,12 +7,15 @@ Traditionally a cron is a [job scheduler](https://en.wikipedia.org/wiki/Job_sche
 ## Setup & Go
 
 First things first let's set up our new project.
+
 ```sh
 $ mkdir examplecron &amp;&amp; cd examplecron
 ```
+
 Now that we have a project directory, create a <em>main.go</em> file in the root of that directory so we have a place to write our code.
 
 As a personal preference, I create my <em>main.go</em> and then follow it with initializing go-mod
+
 ```sh
 $ go mod init
 ```
@@ -73,7 +76,7 @@ func printOut(msg string) {
 
 func runJobs() {
     s := gocron.NewScheduler(time.UTC) // 2
-    
+
     s.Every(1).Minutes().Do(func() { // 3
         printOut("Hello, world!")  // 4
     }
@@ -89,7 +92,7 @@ func main() {
 Alright! For simplicity I&#39;ve numbered the actions so I can describe them more in-depth below.
 
 1. Here we import the gocron library for use in our code
-2. We ask gocron to create a new scheduler. The <strong><em>s</em></strong> variable here will hold onto the scheduler so we can use it in the future to create our scheduled jobs. Into the scheduler we pass <em>time.UTC</em> which is a reference to <em>*time.Location</em> to tell the scheduler the time zone associated with our time.
+2. We ask gocron to create a new scheduler. The <strong><em>s</em></strong> variable here will hold onto the scheduler so we can use it in the future to create our scheduled jobs. Into the scheduler we pass <em>time.UTC</em> which is a reference to <em>\*time.Location</em> to tell the scheduler the time zone associated with our time.
 3. We declare our cron task here. More specifically we tell our scheduler to do something every 1 minute.
 4. This is where the execution lives, or the action we want our cron to perform within the interval we requested. In this case we want it to run our <em>printOut</em> function.
 5. This line starts the scheduler in <em>non-blocking</em> mode which blocks the current execution path.

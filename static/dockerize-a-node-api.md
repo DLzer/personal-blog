@@ -22,15 +22,15 @@ We&#39;ll start of by putting together a fairly normal application. In this case
 I have my setup in the directory <em>/dev/health-check-api</em>. My <em>index.js</em> file is fairly plan but does the trick:
 
 ```js
-var express = require("express");
+var express = require('express');
 var app = express();
 
-app.get("/health", (req, res, next) => {
-    res.json({"message": "ok"});
+app.get('/health', (req, res, next) => {
+	res.json({ message: 'ok' });
 });
 
 app.listen(5000, () => {
-    console.log("Server running on port: 5000");
+	console.log('Server running on port: 5000');
 });
 ```
 
@@ -78,6 +78,7 @@ To run the image we can tell docker to simply run our image using: <em>docker ru
 ## Summary
 
 Today we&#39;ve put together quite a bit of development magic. We created a simple Node API, created a Docker image and ran it as an independent container. This is quite the feat! There&#39;s <strong>A LOT</strong> more that can be done with docker such as:
+
 - Connecting multiple containers over a network bridge
 - Orchestrating docker containers using Kubernetes
 - Building a CI/CD flow to build the images, tag them and run them automatically
